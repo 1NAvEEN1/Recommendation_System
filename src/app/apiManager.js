@@ -1,32 +1,30 @@
-export const post = (
-  path, //  /users/new
-  requestBody,
-  onSuccess = () => {},
-  onError = () => {},
-  onFinally = () => {}
-) => {
-  // eslint-disable-next-line no-undef
+export const post = async ({ path, requestBody, header = {} }) => {
   const baseUrl = import.meta.env.VITE_BASE_URL;
+  console.log(baseUrl);
 
-  fetch(`${baseUrl}${path}`, {
+  const response = await fetch(`${baseUrl}${path}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...header,
     },
     body: JSON.stringify(requestBody),
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.status === "success") {
-        onSuccess(response.data);
-      } else {
-        throw new Error(response.message);
-      }
-    })
-    .catch((error) => {
-      onError(error);
-    })
-    .finally(() => {
-      onFinally();
-    });
+  });
+  const body = await response.json();
+  return body;
+};
+
+export const get = async ({ path, header = {} }) => {
+  const baseUrl = import.meta.env.VITE_BASE_URL;
+
+  const response = await fetch(`${baseUrl}${path}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...header,
+    },
+  });
+
+  const body = await response.json();
+  return body;
 };
