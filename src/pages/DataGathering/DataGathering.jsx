@@ -1,191 +1,565 @@
-    
-import React, { useState } from 'react';
-import { 
-  Box, 
-  TextField, 
-  MenuItem, 
-  FormControl, 
-  InputLabel, 
-  Select, 
-  Slider, 
-  Checkbox, 
-  FormGroup, 
-  FormControlLabel, 
-  Button, 
-  Typography 
-} from '@mui/material';
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import {
+  Box,
+  TextField,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Button,
+  Typography,
+  Slider,
+} from "@mui/material";
 
-const DataGathering = () => {
-  const [companySize, setCompanySize] = useState('');
-  const [industry, setIndustry] = useState('');
-  const [employees, setEmployees] = useState('');
-  const [revenue, setRevenue] = useState('');
-  const [itPersonnel, setItPersonnel] = useState(false);
-  const [cyberBudget, setCyberBudget] = useState('');
-  const [riskPerception, setRiskPerception] = useState(5);
-  const [digitalAssetSensitivity, setDigitalAssetSensitivity] = useState(5);
-  const [practices, setPractices] = useState({
-    firewalls: false,
-    antivirus: false,
-    encryption: false,
-    mfa: false,
-    employeeTraining: false,
+const DataGatheringForm = () => {
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      organizationName: "",
+      industryType: "",
+      employees: "",
+      annualRevenue: "",
+      itStaffSize: "",
+      dataHandled: {
+        "Personal Data": false,
+        "Financial Data": false,
+        "Proprietary Data": false,
+        "Public Data": false,
+      },
+      dataVolume: "",
+      sensitivityLevel: "",
+      regulations: {
+        GDPR: false,
+        HIPAA: false,
+        ISO27001: false,
+        other: "",
+      },
+      securityLayers: "",
+      integrationComplexity: "",
+      scalability: "",
+      customization: "",
+      managementInvolvement: "",
+      budgetAllocation: "",
+      policyEnforcement: "",
+      trainingSupport: "",
+      digitalOperations: "",
+      risks: {
+        Malware: false,
+        Phishing: false,
+        Ransomware: false,
+        "Insider Threats": false,
+        "Supply Chain Attacks": false,
+      },
+      regulatoryRequirements: "",
+      breachFrequency: "",
+      incidentResponse: "",
+      threats: {
+        Malware: false,
+        Phishing: false,
+        Ransomware: false,
+        "Insider Threats": false,
+        other: "",
+      },
+      processStandardization: "",
+      securityAutomation: "",
+      trainingPrograms: "",
+    },
   });
-  const [incidentHistory, setIncidentHistory] = useState(false);
 
-  const handleCompanySizeChange = (event) => setCompanySize(event.target.value);
-  const handleIndustryChange = (event) => setIndustry(event.target.value);
-  const handleEmployeesChange = (event) => setEmployees(event.target.value);
-  const handleRevenueChange = (event) => setRevenue(event.target.value);
-  const handleItPersonnelChange = (event) => setItPersonnel(event.target.checked);
-  const handleCyberBudgetChange = (event) => setCyberBudget(event.target.value);
-  const handleRiskPerceptionChange = (event, newValue) => setRiskPerception(newValue);
-  const handleDigitalAssetSensitivityChange = (event, newValue) => setDigitalAssetSensitivity(newValue);
-  const handlePracticesChange = (event) => {
-    setPractices({ ...practices, [event.target.name]: event.target.checked });
-  };
-  const handleIncidentHistoryChange = (event) => setIncidentHistory(event.target.checked);
-
-  const handleSubmit = () => {
-    // Handle form submission logic here
-    console.log({
-      companySize,
-      industry,
-      employees,
-      revenue,
-      itPersonnel,
-      cyberBudget,
-      riskPerception,
-      digitalAssetSensitivity,
-      practices,
-      incidentHistory
-    });
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 600, margin: '0 auto' }}>
-      <Typography variant="h4" mb={2}>SME Cybersecurity Data Collection</Typography>
+    <Box
+      sx={{ p: 4, maxWidth: 800, margin: "0 auto" }}
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <Typography variant="h4" mb={3}>
+        SME Cybersecurity Data Collection
+      </Typography>
 
-      {/* Company Size */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Company Size</InputLabel>
-        <Select value={companySize} onChange={handleCompanySizeChange}>
-          <MenuItem value="Small">Small</MenuItem>
-          <MenuItem value="Medium">Medium</MenuItem>
-          <MenuItem value="Large">Large</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* Industry Type */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
+      {/* Step 1: Basic Organization Information */}
+      <Typography variant="h6" gutterBottom>
+        Step 1: Basic Organization Information
+      </Typography>
+      <Controller
+        name="organizationName"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            fullWidth
+            label="Organization Name (Optional)"
+            placeholder="Enter your organization name"
+            sx={{ mb: 2 }}
+          />
+        )}
+      />
+      <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.industryType}>
         <InputLabel>Industry Type</InputLabel>
-        <Select value={industry} onChange={handleIndustryChange}>
-          <MenuItem value="Finance">Finance</MenuItem>
-          <MenuItem value="Healthcare">Healthcare</MenuItem>
-          <MenuItem value="Retail">Retail</MenuItem>
-          <MenuItem value="Manufacturing">Manufacturing</MenuItem>
-          {/* Add more industries as needed */}
-        </Select>
+        <Controller
+          name="industryType"
+          control={control}
+          rules={{ required: "Industry type is required." }}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="Healthcare">Healthcare</MenuItem>
+              <MenuItem value="Finance">Finance</MenuItem>
+              <MenuItem value="Retail">Retail</MenuItem>
+              <MenuItem value="Manufacturing">Manufacturing</MenuItem>
+              <MenuItem value="Education">Education</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+          )}
+        />
+        {errors.industryType && (
+          <Typography color="error">{errors.industryType.message}</Typography>
+        )}
       </FormControl>
-
-      {/* Number of Employees */}
-      <TextField
-        fullWidth
-        label="Number of Employees"
-        value={employees}
-        onChange={handleEmployeesChange}
-        type="number"
-        sx={{ mb: 2 }}
+      <Controller
+        name="employees"
+        control={control}
+        rules={{ required: "Number of employees is required." }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            fullWidth
+            label="Number of Employees"
+            type="number"
+            placeholder="Enter the total number of employees"
+            sx={{ mb: 2 }}
+          />
+        )}
+      />
+      <Controller
+        name="annualRevenue"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            fullWidth
+            label="Annual Revenue (Optional)"
+            type="number"
+            placeholder="Enter annual revenue in LKR"
+            sx={{ mb: 2 }}
+          />
+        )}
+      />
+      <Controller
+        name="itStaffSize"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            fullWidth
+            label="IT Staff Size"
+            type="number"
+            placeholder="Number of dedicated IT/security personnel"
+            sx={{ mb: 3 }}
+          />
+        )}
       />
 
-      {/* Annual Revenue */}
-      <TextField
-        fullWidth
-        label="Annual Revenue (Optional)"
-        value={revenue}
-        onChange={handleRevenueChange}
-        type="number"
-        sx={{ mb: 2 }}
-      />
-
-      {/* IT Personnel */}
-      <FormControlLabel
-        control={<Checkbox checked={itPersonnel} onChange={handleItPersonnelChange} />}
-        label="Dedicated IT Personnel"
-        sx={{ mb: 2 }}
-      />
-
-      {/* Cybersecurity Budget */}
-      <FormControl fullWidth sx={{ mb: 2 }}>
-        <InputLabel>Cybersecurity Budget</InputLabel>
-        <Select value={cyberBudget} onChange={handleCyberBudgetChange}>
-          <MenuItem value="No budget">No budget</MenuItem>
-          <MenuItem value="Minimal">Minimal</MenuItem>
-          <MenuItem value="Moderate">Moderate</MenuItem>
-          <MenuItem value="Significant">Significant</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* Digital Asset Sensitivity */}
-      <Typography gutterBottom>Digital Asset Sensitivity</Typography>
-      <Slider
-        value={digitalAssetSensitivity}
-        onChange={handleDigitalAssetSensitivityChange}
-        valueLabelDisplay="auto"
-        step={1}
-        marks
-        min={1}
-        max={10}
-        sx={{ mb: 4 }}
-      />
-
-      {/* Cybersecurity Practices */}
-      <Typography variant="h6" gutterBottom>Current Cybersecurity Practices</Typography>
+      {/* Step 2: Digital Asset Sensitivity */}
+      <Typography variant="h6" gutterBottom>
+        Step 2: Digital Asset Sensitivity
+      </Typography>
       <FormGroup sx={{ mb: 2 }}>
-        <FormControlLabel
-          control={<Checkbox checked={practices.firewalls} onChange={handlePracticesChange} name="firewalls" />}
-          label="Firewalls"
+        {[
+          "Personal Data",
+          "Financial Data",
+          "Proprietary Data",
+          "Public Data",
+        ].map((type) => (
+          <Controller
+            key={type}
+            name={`dataHandled.${type}`}
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} />}
+                label={type}
+              />
+            )}
+          />
+        ))}
+      </FormGroup>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Volume of Data Stored</InputLabel>
+        <Controller
+          name="dataVolume"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="Low">Low (Less than 1 TB)</MenuItem>
+              <MenuItem value="Medium">Medium (1–10 TB)</MenuItem>
+              <MenuItem value="High">High (More than 10 TB)</MenuItem>
+            </Select>
+          )}
         />
-        <FormControlLabel
-          control={<Checkbox checked={practices.antivirus} onChange={handlePracticesChange} name="antivirus" />}
-          label="Antivirus"
+      </FormControl>
+      <FormControl size="small" fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Sensitivity Level</InputLabel>
+        <Controller
+          name="sensitivityLevel"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="High">High</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="Low">Low</MenuItem>
+            </Select>
+          )}
         />
-        <FormControlLabel
-          control={<Checkbox checked={practices.encryption} onChange={handlePracticesChange} name="encryption" />}
-          label="Encryption"
-        />
-        <FormControlLabel
-          control={<Checkbox checked={practices.mfa} onChange={handlePracticesChange} name="mfa" />}
-          label="Multi-Factor Authentication"
-        />
-        <FormControlLabel
-          control={<Checkbox checked={practices.employeeTraining} onChange={handlePracticesChange} name="employeeTraining" />}
-          label="Employee Training"
+      </FormControl>
+      <FormGroup sx={{ mb: 3 }}>
+        {["GDPR", "HIPAA", "ISO 27001"].map((reg) => (
+          <Controller
+            key={reg}
+            name={`regulations.${reg}`}
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel control={<Checkbox {...field} />} label={reg} />
+            )}
+          />
+        ))}
+        <Controller
+          name="regulations.other"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Other (Specify)"
+              placeholder="Specify other regulation"
+              sx={{ mt: 2 }}
+            />
+          )}
         />
       </FormGroup>
 
-      {/* Incident History */}
-      <FormControlLabel
-        control={<Checkbox checked={incidentHistory} onChange={handleIncidentHistoryChange} />}
-        label="Past Data Breaches"
-        sx={{ mb: 2 }}
+      {/* Step 3: Cybersecurity Complexity */}
+      <Typography variant="h6" gutterBottom>
+        Step 3: Cybersecurity Complexity
+      </Typography>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Number of Security Layers</InputLabel>
+        <Controller
+          name="securityLayers"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="1-3 Layers">1–3 Layers</MenuItem>
+              <MenuItem value="4-6 Layers">4–6 Layers</MenuItem>
+              <MenuItem value="More than 6 Layers">More than 6 Layers</MenuItem>
+            </Select>
+          )}
+        />
+      </FormControl>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Integration Complexity</InputLabel>
+        <Controller
+          name="integrationComplexity"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="Easy">Easy</MenuItem>
+              <MenuItem value="Moderate">Moderate</MenuItem>
+              <MenuItem value="Complex">Complex</MenuItem>
+            </Select>
+          )}
+        />
+      </FormControl>
+      <FormControl fullWidth sx={{ mb: 2 }}>
+        <InputLabel>Scalability of Security Measures</InputLabel>
+        <Controller
+          name="scalability"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="Easily Scalable">Easily Scalable</MenuItem>
+              <MenuItem value="Moderately Scalable">
+                Moderately Scalable
+              </MenuItem>
+              <MenuItem value="Not Scalable">Not Scalable</MenuItem>
+            </Select>
+          )}
+        />
+      </FormControl>
+      <FormControl fullWidth sx={{ mb: 3 }}>
+        <InputLabel>Customization Requirements</InputLabel>
+        <Controller
+          name="customization"
+          control={control}
+          render={({ field }) => (
+            <Select {...field}>
+              <MenuItem value="High">High</MenuItem>
+              <MenuItem value="Medium">Medium</MenuItem>
+              <MenuItem value="Low">Low</MenuItem>
+            </Select>
+          )}
+        />
+      </FormControl>
+
+      {/* Step 4: Management Engagement */}
+      <Typography variant="h6" gutterBottom>
+        Step 4: Management Engagement
+      </Typography>
+      <Controller
+        name="managementInvolvement"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Involvement in Cybersecurity Decisions</InputLabel>
+            <Select {...field}>
+              <MenuItem value="High">
+                High (Top management actively involved)
+              </MenuItem>
+              <MenuItem value="Medium">
+                Medium (Occasional involvement)
+              </MenuItem>
+              <MenuItem value="Low">Low (Minimal involvement)</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="budgetAllocation"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            fullWidth
+            label="Budget Allocation for Cybersecurity"
+            type="number"
+            placeholder="Enter the annual cybersecurity budget in USD"
+            sx={{ mb: 2 }}
+          />
+        )}
+      />
+      <Controller
+        name="policyEnforcement"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Policy Enforcement by Management</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Strict">Strict</MenuItem>
+              <MenuItem value="Moderate">Moderate</MenuItem>
+              <MenuItem value="Minimal">Minimal</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="trainingSupport"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Support for Training Programs</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Regular">
+                Regular training programs conducted
+              </MenuItem>
+              <MenuItem value="When Required">
+                Training conducted only when required
+              </MenuItem>
+              <MenuItem value="None">No formal training programs</MenuItem>
+            </Select>
+          </FormControl>
+        )}
       />
 
-      {/* Risk Perception */}
-      <Typography gutterBottom>Risk Perception (1 - Low Risk, 10 - High Risk)</Typography>
-      <Slider
-        value={riskPerception}
-        onChange={handleRiskPerceptionChange}
-        valueLabelDisplay="auto"
-        step={1}
-        min={1}
-        max={10}
-        sx={{ mb: 4 }}
+      {/* Step 5: Industry-Specific Risks */}
+      <Typography variant="h6" gutterBottom>
+        Step 5: Industry-Specific Risks
+      </Typography>
+      <Controller
+        name="digitalOperations"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Digital Operations</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Fully Digital">Fully Digital</MenuItem>
+              <MenuItem value="Partially Digital">Partially Digital</MenuItem>
+              <MenuItem value="Minimal Digitalization">
+                Minimal Digitalization
+              </MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <FormGroup sx={{ mb: 2 }}>
+        {[
+          "Malware",
+          "Phishing",
+          "Ransomware",
+          "Insider Threats",
+          "Supply Chain Attacks",
+        ].map((risk) => (
+          <Controller
+            key={risk}
+            name={`risks.${risk}`}
+            control={control}
+            render={({ field }) => (
+              <FormControlLabel
+                control={<Checkbox {...field} />}
+                label={risk}
+              />
+            )}
+          />
+        ))}
+      </FormGroup>
+      <Controller
+        name="regulatoryRequirements"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Regulatory Requirements by Sector</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Strict">Strict</MenuItem>
+              <MenuItem value="Moderate">Moderate</MenuItem>
+              <MenuItem value="Minimal">Minimal</MenuItem>
+              <MenuItem value="None">None</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+
+      {/* Step 6: Incident and Threat Details */}
+      <Typography variant="h6" gutterBottom>
+        Step 6: Incident and Threat Details
+      </Typography>
+      <Controller
+        name="breachFrequency"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Frequency of Security Breaches</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Regular">Regular (Monthly)</MenuItem>
+              <MenuItem value="Occasional">Occasional (Quarterly)</MenuItem>
+              <MenuItem value="Rare">Rare (Annually)</MenuItem>
+              <MenuItem value="None">None</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="incidentResponse"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Incident Response Effectiveness</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Effective">
+                Effective (Resolved within 24 hours)
+              </MenuItem>
+              <MenuItem value="Moderate">
+                Moderate (Resolved within 1–7 days)
+              </MenuItem>
+              <MenuItem value="Poor">Poor (Takes more than a week)</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <FormGroup sx={{ mb: 3 }}>
+        {["Malware", "Phishing", "Ransomware", "Insider Threats"].map(
+          (threat) => (
+            <Controller
+              key={threat}
+              name={`threats.${threat}`}
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={<Checkbox {...field} />}
+                  label={threat}
+                />
+              )}
+            />
+          )
+        )}
+        <Controller
+          name="threats.other"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              fullWidth
+              label="Other (Specify)"
+              placeholder="Specify other threat"
+              sx={{ mt: 2 }}
+            />
+          )}
+        />
+      </FormGroup>
+
+      {/* Step 7: Cybersecurity Maturity Level */}
+      <Typography variant="h6" gutterBottom>
+        Step 7: Cybersecurity Maturity Level
+      </Typography>
+      <Controller
+        name="processStandardization"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Process Standardization</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Fully Standardized">
+                Fully Standardized (e.g., NIST, ISO 27001)
+              </MenuItem>
+              <MenuItem value="Partially Standardized">
+                Partially Standardized
+              </MenuItem>
+              <MenuItem value="Not Standardized">Not Standardized</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="securityAutomation"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Automation of Security Practices</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Fully Automated">Fully Automated</MenuItem>
+              <MenuItem value="Partially Automated">
+                Partially Automated
+              </MenuItem>
+              <MenuItem value="Manual">Manual</MenuItem>
+            </Select>
+          </FormControl>
+        )}
+      />
+      <Controller
+        name="trainingPrograms"
+        control={control}
+        render={({ field }) => (
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Training and Awareness Programs</InputLabel>
+            <Select {...field}>
+              <MenuItem value="Regularly">Conducted Regularly</MenuItem>
+              <MenuItem value="Occasionally">Occasionally</MenuItem>
+              <MenuItem value="None">None</MenuItem>
+            </Select>
+          </FormControl>
+        )}
       />
 
       {/* Submit Button */}
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <Button variant="contained" color="primary" type='submit'>
+      <Box sx={{ textAlign: "center" }}>
+        <Button variant="contained" color="primary" type="submit">
           Submit
         </Button>
       </Box>
@@ -193,5 +567,4 @@ const DataGathering = () => {
   );
 };
 
-export default DataGathering;
-
+export default DataGatheringForm;
