@@ -50,13 +50,13 @@ const DataGatheringForm = () => {
       policyEnforcement: "",
       trainingSupport: "",
       digitalOperations: "",
-      risks: {
-        Malware: false,
-        Phishing: false,
-        Ransomware: false,
-        "Insider Threats": false,
-        "Supply Chain Attacks": false,
-      },
+      // risks: {
+      //   Malware: false,
+      //   Phishing: false,
+      //   Ransomware: false,
+      //   "Insider Threats": false,
+      //   "Supply Chain Attacks": false,
+      // },
       regulatoryRequirements: "",
       breachFrequency: "",
       incidentResponse: "",
@@ -86,24 +86,10 @@ const DataGatheringForm = () => {
       <Typography variant="h4" mb={3}>
         SME Cybersecurity Data Collection
       </Typography>
-
       {/* Step 1: Basic Organization Information */}
       <Typography variant="h6" gutterBottom>
         Step 1: Basic Organization Information
       </Typography>
-      <Controller
-        name="organizationName"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            fullWidth
-            label="Organization Name (Optional)"
-            placeholder="Enter your organization name"
-            sx={{ mb: 2 }}
-          />
-        )}
-      />
       <FormControl fullWidth sx={{ mb: 2 }} error={!!errors.industryType}>
         <InputLabel>Industry Type</InputLabel>
         <Controller
@@ -116,8 +102,6 @@ const DataGatheringForm = () => {
               <MenuItem value="Finance">Finance</MenuItem>
               <MenuItem value="Retail">Retail</MenuItem>
               <MenuItem value="Manufacturing">Manufacturing</MenuItem>
-              <MenuItem value="Education">Education</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
             </Select>
           )}
         />
@@ -168,10 +152,12 @@ const DataGatheringForm = () => {
           />
         )}
       />
-
       {/* Step 2: Digital Asset Sensitivity */}
       <Typography variant="h6" gutterBottom>
         Step 2: Digital Asset Sensitivity
+      </Typography>
+      <Typography fontWeight={500} mt={2}>
+        Type of Data Handled (select multiple if applicable)
       </Typography>
       <FormGroup sx={{ mb: 2 }}>
         {[
@@ -207,7 +193,7 @@ const DataGatheringForm = () => {
           )}
         />
       </FormControl>
-      <FormControl size="small" fullWidth sx={{ mb: 2 }}>
+      <FormControl fullWidth sx={{ mb: 2 }}>
         <InputLabel>Sensitivity Level</InputLabel>
         <Controller
           name="sensitivityLevel"
@@ -246,7 +232,6 @@ const DataGatheringForm = () => {
           )}
         />
       </FormGroup>
-
       {/* Step 3: Cybersecurity Complexity */}
       <Typography variant="h6" gutterBottom>
         Step 3: Cybersecurity Complexity
@@ -309,7 +294,6 @@ const DataGatheringForm = () => {
           )}
         />
       </FormControl>
-
       {/* Step 4: Management Engagement */}
       <Typography variant="h6" gutterBottom>
         Step 4: Management Engagement
@@ -341,7 +325,7 @@ const DataGatheringForm = () => {
             fullWidth
             label="Budget Allocation for Cybersecurity"
             type="number"
-            placeholder="Enter the annual cybersecurity budget in USD"
+            placeholder="Enter the annual cybersecurity budget in LKR"
             sx={{ mb: 2 }}
           />
         )}
@@ -378,10 +362,12 @@ const DataGatheringForm = () => {
           </FormControl>
         )}
       />
-
       {/* Step 5: Industry-Specific Risks */}
       <Typography variant="h6" gutterBottom>
         Step 5: Industry-Specific Risks
+      </Typography>
+      <Typography fontWeight={500} mt={2}>
+        How digitalized is your organization?
       </Typography>
       <Controller
         name="digitalOperations"
@@ -399,6 +385,9 @@ const DataGatheringForm = () => {
           </FormControl>
         )}
       />
+      {/* <Typography fontWeight={500} mt={2}>
+        Current risks associated with your industry.
+      </Typography>
       <FormGroup sx={{ mb: 2 }}>
         {[
           "Malware",
@@ -419,7 +408,7 @@ const DataGatheringForm = () => {
             )}
           />
         ))}
-      </FormGroup>
+      </FormGroup> */}
       <Controller
         name="regulatoryRequirements"
         control={control}
@@ -435,7 +424,6 @@ const DataGatheringForm = () => {
           </FormControl>
         )}
       />
-
       {/* Step 6: Incident and Threat Details */}
       <Typography variant="h6" gutterBottom>
         Step 6: Incident and Threat Details
@@ -473,6 +461,9 @@ const DataGatheringForm = () => {
           </FormControl>
         )}
       />
+      <Typography fontWeight={500}>
+        Types of Cyber Threats Faced (select multiple)
+      </Typography>
       <FormGroup sx={{ mb: 3 }}>
         {["Malware", "Phishing", "Ransomware", "Insider Threats"].map(
           (threat) => (
@@ -503,60 +494,7 @@ const DataGatheringForm = () => {
           )}
         />
       </FormGroup>
-
-      {/* Step 7: Cybersecurity Maturity Level */}
-      <Typography variant="h6" gutterBottom>
-        Step 7: Cybersecurity Maturity Level
-      </Typography>
-      <Controller
-        name="processStandardization"
-        control={control}
-        render={({ field }) => (
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Process Standardization</InputLabel>
-            <Select {...field}>
-              <MenuItem value="Fully Standardized">
-                Fully Standardized (e.g., NIST, ISO 27001)
-              </MenuItem>
-              <MenuItem value="Partially Standardized">
-                Partially Standardized
-              </MenuItem>
-              <MenuItem value="Not Standardized">Not Standardized</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      />
-      <Controller
-        name="securityAutomation"
-        control={control}
-        render={({ field }) => (
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Automation of Security Practices</InputLabel>
-            <Select {...field}>
-              <MenuItem value="Fully Automated">Fully Automated</MenuItem>
-              <MenuItem value="Partially Automated">
-                Partially Automated
-              </MenuItem>
-              <MenuItem value="Manual">Manual</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      />
-      <Controller
-        name="trainingPrograms"
-        control={control}
-        render={({ field }) => (
-          <FormControl fullWidth sx={{ mb: 3 }}>
-            <InputLabel>Training and Awareness Programs</InputLabel>
-            <Select {...field}>
-              <MenuItem value="Regularly">Conducted Regularly</MenuItem>
-              <MenuItem value="Occasionally">Occasionally</MenuItem>
-              <MenuItem value="None">None</MenuItem>
-            </Select>
-          </FormControl>
-        )}
-      />
-
+     
       {/* Submit Button */}
       <Box sx={{ textAlign: "center" }}>
         <Button variant="contained" color="primary" type="submit">

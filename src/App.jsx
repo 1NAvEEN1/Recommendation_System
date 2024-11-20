@@ -13,6 +13,7 @@ const Layout = Loadable(lazy(() => import("./layout/")));
 const DataGathering = Loadable(
   lazy(() => import("./pages/DataGathering/DataGathering"))
 );
+const Report = Loadable(lazy(() => import("./pages/Report/Report")));
 const Test = Loadable(lazy(() => import("./pages/Test/Test")));
 
 //--------------------------------------------------------------//
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <DataGathering />,
+      },
+      {
+        path: "/report",
+        element: <Report />,
       },
     ],
   },
